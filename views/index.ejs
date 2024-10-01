@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7458</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <header class="header">
+        <h1>blog.7458 </h1>
+        <div id="userinfo">
+            <% if (user) { %>
+                <p>Logged in as <%= user.username %> <a href="/auth/logout">Logout</a></p>
+            <% } else { %>
+                <a href="/auth/login">Login</a> <a href="/auth/register">Register</a>
+            <% } %>
+        </div>
+    </header>
+
+    <% if (user) { %>
+        <form action="/posts" method="POST" class="post-form">
+            <input type="text" name="title" placeholder="Title" required class="input-title">
+            <textarea name="content" placeholder="Content" required class="input-content"></textarea>
+            <button type="submit" class="submit-button">Post</button>
+        </form>
+    <% } %>
+
+    <h2>Posts</h2>
+    <ul>
+        <% posts.forEach(post => { %>
+            <li>
+                <!--<form action="/posts/delete/<%= post._id %>" method="POST" class="delete-form">
+                    <button type="submit" class="delete-button"
+                        onclick="return confirm('Are you sure you want to delete this post?')">Delete</button>
+                </form>-->
+                <a href="/posts/<%= post._id %>">
+                    <%= post.title %>
+                </a>: <%= post.username %> on <%= post.createdAt.toDateString() %>
+            </li>
+        <% }) %>
+    </ul>
+
+    <script>
+        document.getElementById('toggleSort').addEventListener('click', function () {
+            const currentOrder = this.textContent.includes('Newest') ? 'desc' : 'asc';
+            window.location.href = `/posts/sort?order=${currentOrder}`;
+            this.textContent = currentOrder === 'desc' ? 'Sort by Oldest' : 'Sort by Newest';
+        });
+    </script>
+</body>
+
+</html>
